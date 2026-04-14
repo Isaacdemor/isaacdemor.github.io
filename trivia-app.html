@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Trivia Challenge</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0f0f1a;
+      --card: #1a1a2e;
+      --card2: #16213e;
+      --accent: #e94560;
+      --accent2: #0f3460;
+      --gold: #f5a623;
+      --green: #2ecc71;
+      --red: #e74c3c;
+      --text: #eaeaea;
+      --muted: #888;
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      letter-spacing: 0.05em;
+      background: linear-gradient(135deg, var(--accent), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-align: center;
+      margin-bottom: 0.25rem;
+    }
+
+    .tagline {
+      color: var(--muted);
+      font-size: 0.95rem;
+      text-align: center;
+      margin-bottom: 2.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 640px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    /* Setup Screen */
+    #setup-screen label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      margin-top: 1.5rem;
+    }
+
+    #setup-screen label:first-child { margin-top: 0; }
+
+    select, input[type="number"] {
+      width: 100%;
+      background: var(--card2);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      color: var(--text);
+      padding: 0.85rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      appearance: none;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    select:focus, input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .btn {
+      width: 100%;
+      margin-top: 2rem;
+      padding: 1rem;
+      background: linear-gradient(135deg, var(--accent), #c73652);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: transform 0.15s, opacity 0.15s;
+    }
+
+    .btn:hover:not(:disabled) { transform: translateY(-2px); opacity: 0.92; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* Loading */
+    #loading-screen {
+      text-align: center;
+      display: none;
+    }
+
+    .spinner {
+      width: 50px; height: 50px;
+      border: 4px solid rgba(255,255,255,0.1);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 1.5rem;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    #loading-screen p { color: var(--muted); font-size: 1rem; }
+
+    /* Quiz Screen */
+    #quiz-screen { display: none; }
+
+    .progress-bar-wrap {
+      background: rgba(255,255,255,0.08);
+      border-radius: 99px;
+      height: 6px;
+      margin-bottom: 1.75rem;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--gold));
+      border-radius: 99px;
+      transition: width 0.4s ease;
+    }
+
+    .quiz-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .quiz-meta span { color: var(--gold); font-weight: 700; }
+
+    .question-text {
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.5;
+      margin-bottom: 1.75rem;
+      color: var(--text);
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85rem;
+    }
+
+    .option-btn {
+      background: var(--card2);
+      border: 2px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.97rem;
+      padding: 1rem;
+      cursor: pointer;
+      text-align: left;
+      line-height: 1.4;
+      transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .option-btn.correct {
+      background: rgba(46,204,113,0.15);
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .option-btn.wrong {
+      background: rgba(231,76,60,0.15);
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    .option-btn:disabled { cursor: default; }
+
+    .feedback-box {
+      margin-top: 1.5rem;
+      padding: 1rem 1.25rem;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      display: none;
+    }
+
+    .feedback-box.show { display: block; }
+    .feedback-box.correct { background: rgba(46,204,113,0.1); border: 1px solid rgba(46,204,113,0.3); color: #7defa3; }
+    .feedback-box.wrong { background: rgba(231,76,60,0.1); border: 1px solid rgba(231,76,60,0.3); color: #f5a0a0; }
+
+    .next-btn {
+      margin-top: 1.25rem;
+      width: 100%;
+      padding: 0.85rem;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: none;
+      transition: background 0.2s;
+    }
+
+    .next-btn.show { display: block; }
+    .next-btn:hover { background: rgba(255,255,255,0.1); }
+
+    /* Results */
+    #results-screen {
+      display: none;
+      text-align: center;
+    }
+
+    .score-circle {
+      width: 130px; height: 130px;
+      border-radius: 50%;
+      border: 5px solid var(--gold);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      background: rgba(245,166,35,0.08);
+    }
+
+    .score-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.8rem;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .score-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+
+    #results-screen h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    #results-screen p { color: var(--muted); margin-bottom: 1.5rem; }
+
+    .review-list { text-align: left; margin-top: 1.5rem; }
+
+    .review-item {
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 0.75rem;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .review-item.correct { background: rgba(46,204,113,0.08); border-left: 3px solid var(--green); }
+    .review-item.wrong { background: rgba(231,76,60,0.08); border-left: 3px solid var(--red); }
+    .review-item .q { font-weight: 600; margin-bottom: 0.25rem; color: var(--text); }
+    .review-item .a { color: var(--muted); font-size: 0.85rem; }
+    .review-item .a span { color: var(--green); font-weight: 600; }
+  </style>
+</head>
+<body>
+
+<h1>Trivia Challenge</h1>
+<p class="tagline">AI-generated questions — new every time</p>
+
+<div class="card">
+
+  <!-- Setup -->
+  <div id="setup-screen">
+    <label>Topic / Category</label>
+    <select id="topic-select">
+      <option value="General Knowledge">General Knowledge</option>
+      <option value="Science & Nature">Science & Nature</option>
+      <option value="History">History</option>
+      <option value="Geography">Geography</option>
+      <option value="Sports">Sports</option>
+      <option value="Music">Music</option>
+      <option value="Movies & TV">Movies & TV</option>
+      <option value="Technology">Technology</option>
+      <option value="Fishing & The Outdoors">Fishing & The Outdoors</option>
+    </select>
+
+    <label>Difficulty</label>
+    <select id="difficulty-select">
+      <option value="easy">Easy</option>
+      <option value="medium" selected>Medium</option>
+      <option value="hard">Hard</option>
+    </select>
+
+    <label>Number of Questions</label>
+    <select id="count-select">
+      <option value="5">5 Questions</option>
+      <option value="10" selected>10 Questions</option>
+      <option value="15">15 Questions</option>
+    </select>
+
+    <button class="btn" id="start-btn" onclick="startQuiz()">Start Quiz</button>
+  </div>
+
+  <!-- Loading -->
+  <div id="loading-screen">
+    <div class="spinner"></div>
+    <p>Generating your questions with AI...</p>
+  </div>
+
+  <!-- Quiz -->
+  <div id="quiz-screen">
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progress-bar"></div>
+    </div>
+    <div class="quiz-meta">
+      <span id="q-counter">Question 1 of 10</span>
+      <span>Score: <span id="score-display">0</span></span>
+    </div>
+    <div class="question-text" id="question-text"></div>
+    <div class="options-grid" id="options-grid"></div>
+    <div class="feedback-box" id="feedback-box"></div>
+    <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next Question →</button>
+  </div>
+
+  <!-- Results -->
+  <div id="results-screen">
+    <div class="score-circle">
+      <div class="score-number" id="final-score-num">0</div>
+      <div class="score-label">Score</div>
+    </div>
+    <h2 id="results-title">Quiz Complete!</h2>
+    <p id="results-msg"></p>
+    <button class="btn" onclick="resetQuiz()">Play Again</button>
+    <div class="review-list" id="review-list"></div>
+  </div>
+
+</div>
+
+<script>
+  let questions = [];
+  let currentQ = 0;
+  let score = 0;
+  let userAnswers = [];
+
+  function show(id) {
+    ['setup-screen','loading-screen','quiz-screen','results-screen'].forEach(s => {
+      document.getElementById(s).style.display = s === id ? 'block' : 'none';
+    });
+  }
+
+  async function startQuiz() {
+    const topic = document.getElementById('topic-select').value;
+    const difficulty = document.getElementById('difficulty-select').value;
+    const count = document.getElementById('count-select').value;
+
+    show('loading-screen');
+
+    try {
+      const prompt = `Generate ${count} trivia questions about "${topic}" at ${difficulty} difficulty.
+
+Return ONLY a JSON array with no markdown, no explanation, no backticks. Each item must have:
+- "question": the question string
+- "options": array of exactly 4 answer strings (A, B, C, D)
+- "answer": the index (0-3) of the correct option
+- "explanation": a 1-2 sentence explanation of the correct answer
+
+Example format:
+[{"question":"...","options":["A","B","C","D"],"answer":0,"explanation":"..."}]`;
+
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 1000,
+          messages: [{ role: "user", content: prompt }]
+        })
+      });
+
+      const data = await response.json();
+      const raw = data.content.map(b => b.text || '').join('').trim();
+      const cleaned = raw.replace(/```json|```/g, '').trim();
+      questions = JSON.parse(cleaned);
+
+      currentQ = 0;
+      score = 0;
+      userAnswers = [];
+      show('quiz-screen');
+      renderQuestion();
+
+    } catch (err) {
+      console.error(err);
+      alert('Failed to generate questions. Please try again.');
+      show('setup-screen');
+    }
+  }
+
+  function renderQuestion() {
+    const q = questions[currentQ];
+    const total = questions.length;
+
+    document.getElementById('progress-bar').style.width = `${((currentQ) / total) * 100}%`;
+    document.getElementById('q-counter').textContent = `Question ${currentQ + 1} of ${total}`;
+    document.getElementById('score-display').textContent = score;
+    document.getElementById('question-text').textContent = q.question;
+
+    const grid = document.getElementById('options-grid');
+    grid.innerHTML = '';
+    q.options.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'option-btn';
+      btn.textContent = opt;
+      btn.onclick = () => selectAnswer(i);
+      grid.appendChild(btn);
+    });
+
+    document.getElementById('feedback-box').className = 'feedback-box';
+    document.getElementById('feedback-box').textContent = '';
+    document.getElementById('next-btn').className = 'next-btn';
+  }
+
+  function selectAnswer(index) {
+    const q = questions[currentQ];
+    const buttons = document.querySelectorAll('.option-btn');
+    buttons.forEach(b => b.disabled = true);
+
+    const isCorrect = index === q.answer;
+    if (isCorrect) score++;
+
+    buttons[index].classList.add(isCorrect ? 'correct' : 'wrong');
+    if (!isCorrect) buttons[q.answer].classList.add('correct');
+
+    const fb = document.getElementById('feedback-box');
+    fb.textContent = (isCorrect ? '✓ Correct! ' : '✗ Incorrect. ') + q.explanation;
+    fb.className = `feedback-box show ${isCorrect ? 'correct' : 'wrong'}`;
+
+    userAnswers.push({ question: q.question, chosen: index, correct: q.answer, options: q.options, isCorrect });
+
+    const nextBtn = document.getElementById('next-btn');
+    nextBtn.className = 'next-btn show';
+    nextBtn.textContent = currentQ < questions.length - 1 ? 'Next Question →' : 'See Results →';
+  }
+
+  function nextQuestion() {
+    currentQ++;
+    if (currentQ < questions.length) {
+      renderQuestion();
+    } else {
+      showResults();
+    }
+  }
+
+  function showResults() {
+    show('results-screen');
+    const total = questions.length;
+    const pct = Math.round((score / total) * 100);
+
+    document.getElementById('final-score-num').textContent = `${score}/${total}`;
+    document.getElementById('progress-bar').style.width = '100%';
+
+    let title, msg;
+    if (pct >= 90) { title = "Incredible! 🏆"; msg = "You're a trivia master!"; }
+    else if (pct >= 70) { title = "Great Job! 🎉"; msg = "Solid performance — well done!"; }
+    else if (pct >= 50) { title = "Not Bad! 👍"; msg = "A little more studying and you'll nail it."; }
+    else { title = "Keep Trying! 💪"; msg = "Every round is a chance to learn something new."; }
+
+    document.getElementById('results-title').textContent = title;
+    document.getElementById('results-msg').textContent = msg;
+
+    const reviewList = document.getElementById('review-list');
+    reviewList.innerHTML = '<strong style="display:block;margin-bottom:1rem;color:var(--muted);font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em">Review</strong>';
+    userAnswers.forEach((a, i) => {
+      const div = document.createElement('div');
+      div.className = `review-item ${a.isCorrect ? 'correct' : 'wrong'}`;
+      div.innerHTML = `<div class="q">${i+1}. ${a.question}</div>
+        <div class="a">Your answer: ${a.options[a.chosen]} ${a.isCorrect ? '✓' : `✗ — Correct: <span>${a.options[a.correct]}</span>`}</div>`;
+      reviewList.appendChild(div);
+    });
+  }
+
+  function resetQuiz() {
+    questions = [];
+    show('setup-screen');
+  }
+
+  show('setup-screen');
+</script>
+</body>
+</html>

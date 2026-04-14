@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Isaac DeMordaunt — Economics & Finance</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root {
+      --navy:    #0b1f3a;
+      --navy2:   #112844;
+      --gold:    #c9a84c;
+      --gold2:   #e8c97a;
+      --cream:   #f8f4ee;
+      --light:   #ffffff;
+      --muted:   #6b7a8d;
+      --border:  rgba(201,168,76,0.25);
+      --shadow:  0 4px 32px rgba(11,31,58,0.10);
+      --ff-head: 'Cormorant Garamond', Georgia, serif;
+      --ff-body: 'Outfit', sans-serif;
+      --radius:  10px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--ff-body);
+      background: var(--cream);
+      color: var(--navy);
+    }
+
+    /* ── Navbar ── */
+    .navbar {
+      background: var(--navy) !important;
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 0;
+    }
+    .navbar-brand {
+      font-family: var(--ff-head);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--gold) !important;
+      letter-spacing: 0.04em;
+    }
+    .navbar-nav .nav-link {
+      color: rgba(255,255,255,0.75) !important;
+      font-size: 0.88rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.4rem 1rem !important;
+      transition: color 0.2s;
+    }
+    .navbar-nav .nav-link:hover { color: var(--gold) !important; }
+    .navbar-toggler { border-color: var(--border); }
+    .navbar-toggler-icon { filter: invert(1); }
+
+    /* Social icons in navbar */
+    .nav-social a {
+      color: rgba(255,255,255,0.6);
+      font-size: 1.1rem;
+      margin-left: 0.75rem;
+      transition: color 0.2s;
+      text-decoration: none;
+    }
+    .nav-social a:hover { color: var(--gold); }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 60%, #1a3a5c 100%);
+      padding: 7rem 0 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 420px; height: 420px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
+    }
+    .hero-name {
+      font-family: var(--ff-head);
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 300;
+      color: var(--light);
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+    }
+    .hero-name span { color: var(--gold); font-weight: 700; }
+    .hero-title {
+      font-size: 1rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold2);
+      margin: 1rem 0 1.5rem;
+      font-weight: 500;
+    }
+    .hero-desc {
+      color: rgba(255,255,255,0.75);
+      font-size: 1.05rem;
+      max-width: 520px;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+    .hero-badges { margin-top: 2rem; display: flex; flex-wrap: wrap; gap: 0.6rem; }
+    .hero-badge {
+      background: rgba(201,168,76,0.15);
+      border: 1px solid var(--border);
+      color: var(--gold2);
+      padding: 0.35rem 1rem;
+      border-radius: 99px;
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+    }
+    .hero-contact {
+      margin-top: 2.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+    }
+    .hero-contact a {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.2s;
+    }
+    .hero-contact a:hover { color: var(--gold); }
+    .hero-contact i { color: var(--gold); font-size: 1rem; }
+
+    .hero-gpa {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem 1.5rem;
+      text-align: center;
+    }
+    .hero-gpa .big { font-family: var(--ff-head); font-size: 3.5rem; color: var(--gold); line-height: 1; font-weight: 700; }
+    .hero-gpa .lbl { font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-top: 0.25rem; }
+    .hero-gpa .divider { border-top: 1px solid var(--border); margin: 1rem 0; }
+    .hero-gpa .sub { font-size: 0.88rem; color: rgba(255,255,255,0.65); }
+
+    /* ── Section Titles ── */
+    .section-wrap { padding: 5rem 0; }
+    .section-wrap.alt { background: var(--light); }
+
+    .section-title {
+      font-family: var(--ff-head);
+      font-size: 2.4rem;
+      font-weight: 600;
+      color: var(--navy);
+      position: relative;
+      padding-bottom: 0.75rem;
+      margin-bottom: 2.5rem;
+    }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 48px; height: 3px;
+      background: var(--gold);
+      border-radius: 2px;
+    }
+
+    /* ── Experience Cards ── */
+    .exp-card {
+      border-left: 3px solid var(--gold);
+      padding: 1.5rem 1.75rem;
+      background: var(--light);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .exp-card:hover { transform: translateX(4px); box-shadow: 0 6px 40px rgba(11,31,58,0.14); }
+    .exp-title { font-family: var(--ff-head); font-size: 1.3rem; font-weight: 700; color: var(--navy); }
+    .exp-company { font-size: 0.95rem; color: var(--gold); font-weight: 600; margin-bottom: 0.25rem; }
+    .exp-meta { font-size: 0.8rem; color: var(--muted); letter-spacing: 0.05em; margin-bottom: 1rem; }
+    .exp-meta i { margin-right: 0.3rem; }
+    .exp-card ul { padding-left: 1.2rem; }
+    .exp-card ul li { font-size: 0.92rem; color: #3a4a5c; margin-bottom: 0.4rem; line-height: 1.5; }
+
+    /* ── Education ── */
+    .edu-card {
+      background: var(--navy);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      color: var(--light);
+      position: relative;
+      overflow: hidden;
+    }
+    .edu-card::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,0.15) 0%, transparent 70%);
+    }
+    .edu-school { font-family: var(--ff-head); font-size: 1.8rem; font-weight: 700; color: var(--gold); }
+    .edu-degree { font-size: 1rem; color: rgba(255,255,255,0.85); margin: 0.5rem 0 1.25rem; line-height: 1.5; }
+    .edu-badge {
+      display: inline-block;
+      background: rgba(201,168,76,0.15);
+      border: 1px solid var(--border);
+      color: var(--gold2);
+      padding: 0.3rem 0.85rem;
+      border-radius: 99px;
+      font-size: 0.8rem;
+      margin: 0.25rem 0.25rem 0.25rem 0;
+    }
+
+    /* ── Skills ── */
+    .skill-pill {
+      background: var(--cream);
+      border: 1px solid rgba(11,31,58,0.12);
+      color: var(--navy);
+      padding: 0.5rem 1.1rem;
+      border-radius: 99px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      display: inline-block;
+      margin: 0.3rem;
+      transition: background 0.2s, color 0.2s;
+    }
+    .skill-pill:hover { background: var(--navy); color: var(--gold); }
+
+    .skill-category { font-family: var(--ff-head); font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-bottom: 0.75rem; letter-spacing: 0.03em; }
+
+    /* ── Accomplishments ── */
+    .acc-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.25rem;
+      border-radius: var(--radius);
+      background: var(--cream);
+      margin-bottom: 1rem;
+      border: 1px solid rgba(11,31,58,0.07);
+      transition: box-shadow 0.2s;
+    }
+    .acc-item:hover { box-shadow: var(--shadow); }
+    .acc-icon { font-size: 1.4rem; color: var(--gold); flex-shrink: 0; margin-top: 2px; }
+    .acc-text { font-size: 0.93rem; color: #3a4a5c; line-height: 1.5; }
+
+    /* ── Service ── */
+    .service-card {
+      background: var(--light);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      height: 100%;
+      border-top: 4px solid var(--gold);
+    }
+    .service-card h5 { font-family: var(--ff-head); font-size: 1.15rem; font-weight: 700; color: var(--navy); margin-bottom: 0.25rem; }
+    .service-card .org { font-size: 0.88rem; color: var(--gold); font-weight: 600; margin-bottom: 0.15rem; }
+    .service-card .meta { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.75rem; }
+    .service-card p { font-size: 0.88rem; color: #3a4a5c; line-height: 1.5; margin: 0; }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--navy);
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 2.5rem 1rem;
+      font-size: 0.85rem;
+    }
+    footer a { color: var(--gold); text-decoration: none; }
+    .footer-social a {
+      color: rgba(255,255,255,0.5);
+      font-size: 1.3rem;
+      margin: 0 0.5rem;
+      transition: color 0.2s;
+      text-decoration: none;
+    }
+    .footer-social a:hover { color: var(--gold); }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.7s ease both; }
+    .fade-up-2 { animation: fadeUp 0.7s 0.15s ease both; }
+    .fade-up-3 { animation: fadeUp 0.7s 0.3s ease both; }
+  </style>
+</head>
+<body>
+
+<!-- ── Navbar ── -->
+<nav class="navbar navbar-expand-lg sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="#">Isaac DeMordaunt</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto align-items-center">
+        <li class="nav-item"><a class="nav-link" href="#experience">Experience</a></li>
+        <li class="nav-item"><a class="nav-link" href="#education">Education</a></li>
+        <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+        <li class="nav-item"><a class="nav-link" href="#service">Service</a></li>
+        <li class="nav-item"><a class="nav-link" href="#accomplishments">Achievements</a></li>
+        <li class="nav-item"><a class="nav-link" href="scratch.html">My Hobby</a></li>
+        <li class="nav-item"><a class="nav-link" href="trivia-app.html">Trivia App</a></li>
+      </ul>
+      <div class="nav-social ms-3 d-flex align-items-center">
+        <a href="https://www.linkedin.com/in/isaac-demordaunt" target="_blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+        <a href="mailto:isaacdemor@gmail.com" title="Email"><i class="bi bi-envelope-fill"></i></a>
+        <a href="tel:2089573311" title="Phone"><i class="bi bi-telephone-fill"></i></a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="hero">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-8 fade-up">
+        <p class="hero-title">Economics · Finance · Strategy</p>
+        <h1 class="hero-name">Isaac<br/><span>DeMordaunt</span></h1>
+        <p class="hero-desc">BYU Economics student with a passion for investment analysis, strategy consulting, and financial modeling. Building a career at the intersection of data and decision-making.</p>
+        <div class="hero-badges">
+          <span class="hero-badge">Investment Banking Association</span>
+          <span class="hero-badge">Management Consulting Association</span>
+          <span class="hero-badge">Phi Alpha Honor Society</span>
+          <span class="hero-badge">Model United Nations</span>
+        </div>
+        <div class="hero-contact">
+          <a href="mailto:isaacdemor@gmail.com"><i class="bi bi-envelope-fill"></i> isaacdemor@gmail.com</a>
+          <a href="tel:2089573311"><i class="bi bi-telephone-fill"></i> (208) 957-3311</a>
+          <a href="https://www.linkedin.com/in/isaac-demordaunt" target="_blank"><i class="bi bi-linkedin"></i> LinkedIn</a>
+        </div>
+      </div>
+      <div class="col-lg-4 fade-up-2">
+        <div class="hero-gpa">
+          <div class="big">3.93</div>
+          <div class="lbl">GPA / 4.00</div>
+          <div class="divider"></div>
+          <div class="sub mb-2"><i class="bi bi-award-fill text-warning me-1"></i> Half-Tuition Academic Scholarship</div>
+          <div class="sub mb-2"><i class="bi bi-award-fill text-warning me-1"></i> Economics Merit Scholarship</div>
+          <div class="sub"><i class="bi bi-bar-chart-fill text-warning me-1"></i> ACT 32 — 97th Percentile</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Experience ── -->
+<section class="section-wrap" id="experience">
+  <div class="container">
+    <h2 class="section-title">Experience</h2>
+    <div class="row">
+      <div class="col-lg-6">
+
+        <div class="exp-card">
+          <div class="exp-title">Search Fund Intern</div>
+          <div class="exp-company">Ironclad Growth Partners</div>
+          <div class="exp-meta"><i class="bi bi-geo-alt"></i>Boise, ID &nbsp;·&nbsp; <i class="bi bi-calendar3"></i> Jan 2026 – Present</div>
+          <ul>
+            <li>Identified and screened 1,000+ lower-middle-market acquisition targets, supporting deal pipeline development for a buyout-focused search fund</li>
+            <li>Conducted preliminary diligence analyzing financials, customer concentration, and market size</li>
+          </ul>
+        </div>
+
+        <div class="exp-card">
+          <div class="exp-title">Financial Analyst</div>
+          <div class="exp-company">Silver Fund — Student-Run $4.2M Equity Portfolio</div>
+          <div class="exp-meta"><i class="bi bi-geo-alt"></i>Provo, UT &nbsp;·&nbsp; <i class="bi bi-calendar3"></i> Jan 2026 – Present</div>
+          <ul>
+            <li>Selected as only non-Marriott School analyst managing a $4.2M equity portfolio</li>
+            <li>Performed valuation and risk analysis using DCF, comps, and financial modeling</li>
+            <li>Developed investment recommendations through fundamental research and industry analysis</li>
+          </ul>
+        </div>
+
+        <div class="exp-card">
+          <div class="exp-title">Investment Analyst</div>
+          <div class="exp-company">Brigham Capital</div>
+          <div class="exp-meta"><i class="bi bi-geo-alt"></i>Provo, UT &nbsp;·&nbsp; <i class="bi bi-calendar3"></i> Jan 2026 – Present</div>
+          <ul>
+            <li>Build bottom-up investment theses through fundamental analysis, valuation, and industry research</li>
+            <li>Analyze industrial sector dynamics including macro trends and competitive positioning to identify mispriced opportunities</li>
+          </ul>
+        </div>
+
+      </div>
+      <div class="col-lg-6">
+
+        <div class="exp-card">
+          <div class="exp-title">Strategy Analyst</div>
+          <div class="exp-company">Atmo Earth</div>
+          <div class="exp-meta"><i class="bi bi-geo-alt"></i>Berlin, Germany &nbsp;·&nbsp; <i class="bi bi-calendar3"></i> Jun 2026 – Aug 2026</div>
+          <ul>
+            <li>Evaluated carbon-removal projects and optimized operational processes for agricultural partners</li>
+            <li>Assisted outreach to financial institutions to support project financing and scalability</li>
+          </ul>
+        </div>
+
+        <div class="exp-card">
+          <div class="exp-title">Financial Accountant Assistant</div>
+          <div class="exp-company">Kennedy Center BYU / BYU Financial Services</div>
+          <div class="exp-meta"><i class="bi bi-geo-alt"></i>Provo, UT &nbsp;·&nbsp; <i class="bi bi-calendar3"></i> Apr 2025 – Jan 2026</div>
+          <ul>
+            <li>Managed financial operations for 25+ study abroad programs and 30+ faculty accounts</li>
+            <li>Executed multi-currency transaction processing across 15 exchange rates in Workday</li>
+          </ul>
+        </div>
+
+        <div class="exp-card">
+          <div class="exp-title">Project Manager</div>
+          <div class="exp-company">Hawk-Hill (Ecommerce) — On-Campus Internship</div>
+          <div class="exp-meta"><i class="bi bi-geo-alt"></i>Provo, UT &nbsp;·&nbsp; <i class="bi bi-calendar3"></i> Jan 2025 – May 2025</div>
+          <ul>
+            <li>Increased website engagement and revenue 200%+ by improving blog visibility and optimizing ads</li>
+            <li>Led a 3-person team executing affiliate marketing strategies</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Education ── -->
+<section class="section-wrap alt" id="education">
+  <div class="container">
+    <h2 class="section-title">Education</h2>
+    <div class="edu-card">
+      <div class="row align-items-center g-4">
+        <div class="col-md-8">
+          <div class="edu-school">Brigham Young University</div>
+          <div class="edu-degree">Bachelor of Science, Economics<br/>Minors in Mathematics, Spanish &amp; Business &nbsp;·&nbsp; Expected April 2028 &nbsp;·&nbsp; Provo, UT</div>
+          <span class="edu-badge"><i class="bi bi-trophy me-1"></i>GPA 3.93 / 4.00</span>
+          <span class="edu-badge"><i class="bi bi-bar-chart me-1"></i>ACT 32 — 97th Percentile</span>
+          <span class="edu-badge"><i class="bi bi-award me-1"></i>Half-Tuition Scholarship</span>
+          <span class="edu-badge"><i class="bi bi-award me-1"></i>Economics Merit Scholarship</span>
+          <span class="edu-badge">Phi Alpha Honor Society</span>
+          <span class="edu-badge">Investment Banking Association</span>
+          <span class="edu-badge">Management Consulting Association</span>
+          <span class="edu-badge">Model United Nations</span>
+        </div>
+        <div class="col-md-4 text-center">
+          <div style="font-family:'Cormorant Garamond',serif; font-size:5rem; color:rgba(201,168,76,0.3); line-height:1;">Y</div>
+          <p style="color:rgba(255,255,255,0.4); font-size:0.8rem; letter-spacing:0.1em; text-transform:uppercase;">Brigham Young University</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Skills ── -->
+<section class="section-wrap" id="skills">
+  <div class="container">
+    <h2 class="section-title">Skills & Languages</h2>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="skill-category">Finance & Analysis</div>
+        <span class="skill-pill">DCF Valuation</span>
+        <span class="skill-pill">Comparable Company Analysis</span>
+        <span class="skill-pill">Financial Modeling</span>
+        <span class="skill-pill">Equity Research</span>
+        <span class="skill-pill">Portfolio Management</span>
+        <span class="skill-pill">Due Diligence</span>
+      </div>
+      <div class="col-md-4">
+        <div class="skill-category">Tools & Platforms</div>
+        <span class="skill-pill">Microsoft Excel</span>
+        <span class="skill-pill">Workday</span>
+        <span class="skill-pill">Bloomberg (coursework)</span>
+        <span class="skill-pill">Affiliate Marketing</span>
+        <span class="skill-pill">SEO & Web Analytics</span>
+      </div>
+      <div class="col-md-4">
+        <div class="skill-category">Languages & Certifications</div>
+        <span class="skill-pill">English — Native</span>
+        <span class="skill-pill">Spanish — Fluent</span>
+        <span class="skill-pill">PADI Scuba Certified</span>
+        <span class="skill-pill">Eagle Scout</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Service ── -->
+<section class="section-wrap alt" id="service">
+  <div class="container">
+    <h2 class="section-title">Service & Leadership</h2>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="service-card">
+          <h5>Volunteer Representative</h5>
+          <div class="org">The Church of Jesus Christ of Latter-day Saints</div>
+          <div class="meta"><i class="bi bi-geo-alt"></i> Cancun, Mexico &nbsp;·&nbsp; May 2022 – May 2024</div>
+          <p>Directed 120+ volunteers from diverse backgrounds, addressing individual needs and resolving concerns while maintaining an 80-hour work week for 2 years. Served as Assistant to the President.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="service-card">
+          <h5>Trip Leader</h5>
+          <div class="org">Humanitarian Experience</div>
+          <div class="meta"><i class="bi bi-geo-alt"></i> Outer Banks, NC &nbsp;·&nbsp; Aug – Sept 2025</div>
+          <p>Mentored 20+ youth volunteers through humanitarian service, fostering leadership development and cross-cultural engagement.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="service-card">
+          <h5>Annual Ranch Hand & Cattle Wrangler</h5>
+          <div class="org">D/D Ranch</div>
+          <div class="meta"><i class="bi bi-geo-alt"></i> Leadore, ID &nbsp;·&nbsp; Aug 2016 – Present</div>
+          <p>Managed and cared for livestock including cattle, horses, and other ranch animals, ensuring their health and safety across annual working seasons.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Accomplishments ── -->
+<section class="section-wrap" id="accomplishments">
+  <div class="container">
+    <h2 class="section-title">Accomplishments & Interests</h2>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="acc-item">
+          <div class="acc-icon"><i class="bi bi-patch-check-fill"></i></div>
+          <div class="acc-text"><strong>Eagle Scout</strong> — Managed 15+ volunteers for a wildlife habitat restoration project in Southern Idaho</div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-icon"><i class="bi bi-trophy-fill"></i></div>
+          <div class="acc-text"><strong>All-American — Jack Pitts/Bob Scott Lacrosse Award</strong> — Only person in the State of Idaho to receive this award</div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-icon"><i class="bi bi-person-fill"></i></div>
+          <div class="acc-text"><strong>Senior Class President & Graduation Speaker</strong> — 2020–2021</div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="acc-item">
+          <div class="acc-icon"><i class="bi bi-translate"></i></div>
+          <div class="acc-text"><strong>Spanish Language</strong> — Fluent, developed through 2-year mission in Cancun, Mexico</div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-icon"><i class="bi bi-water"></i></div>
+          <div class="acc-text"><strong>PADI Scuba Certified</strong> — Open water certified diver</div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-icon"><i class="bi bi-tree-fill"></i></div>
+          <div class="acc-text"><strong>Outdoor Enthusiast</strong> — Fishing, ranching, hiking, and adventure sports across the American West</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="footer-social mb-3">
+    <a href="https://www.linkedin.com/in/isaac-demordaunt" target="_blank"><i class="bi bi-linkedin"></i></a>
+    <a href="mailto:isaacdemor@gmail.com"><i class="bi bi-envelope-fill"></i></a>
+    <a href="tel:2089573311"><i class="bi bi-telephone-fill"></i></a>
+    <a href="scratch.html"><i class="bi bi-fish"></i></a>
+  </div>
+  <p>&copy; 2026 Isaac DeMordaunt &nbsp;·&nbsp; <a href="mailto:isaacdemor@gmail.com">isaacdemor@gmail.com</a></p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
